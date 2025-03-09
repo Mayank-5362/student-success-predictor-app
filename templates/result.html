@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Prediction Result</h1>
+        <p>The student will: <strong>{{ prediction }}</strong></p>
+
+        <h3>Feature Importance</h3>
+        <canvas id="importanceChart"></canvas>
+        <a href="/">Go Back</a>
+    </div>
+
+    <script>
+        // Parse the feature importance JSON data
+        const featureImportance = JSON.parse('{{ feature_importance | tojson | safe }}');
+        const labels = Object.keys(featureImportance);
+        const values = Object.values(featureImportance);
+
+        // Set up the chart
+        const ctx = document.getElementById('importanceChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Feature Importance',
+                    data: values,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
